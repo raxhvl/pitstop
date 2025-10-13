@@ -12,7 +12,7 @@ dependencies = [
 ]
 
 [project.scripts]
-pitstop = "pitstop.cli:cli"
+pitstop = "cli.cli:pitstop"
 
 [dependency-groups]
 dev = [
@@ -20,8 +20,11 @@ dev = [
 ]
 
 [build-system]
-requires = ["hatchling"]
-build-backend = "hatchling.build"
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]
 
 [tool.ruff]
 line-length = 88
