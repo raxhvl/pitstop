@@ -1,7 +1,36 @@
 [project]
 name = "pitstop"
 version = "0.1.0"
-description = ""
+description = "Automate Ethereum gas schedule changes across clients"
 readme = "README.md"
-requires-python = ">=3.12"
-dependencies = []
+requires-python = ">=3.11"
+dependencies = [
+    "click>=8.3.0",
+    "jinja2>=3.1.6",
+    "pydantic>=2.12.0",
+    "pyyaml>=6.0.3",
+]
+
+[project.scripts]
+pitstop = "pitstop.cli:cli"
+
+[dependency-groups]
+dev = [
+    "ruff>=0.14.0",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.ruff]
+line-length = 88
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "I"]  # Error, pyflakes, isort
+ignore = []
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
