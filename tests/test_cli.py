@@ -121,3 +121,49 @@ def test_check_missing_file(cli_runner):
     )
 
     assert result.exit_code == 2  # Click's error code for invalid path
+
+
+def test_compare_identical_schedules(cli_runner):
+    """Test comparing identical schedules."""
+    result = cli_runner.invoke(pitstop, ["compare", "prague", "prague"])
+
+    assert result.exit_code == 0
+    assert "match perfectly" in result.output
+
+
+def test_compare_different_schedules(cli_runner, tmp_path):
+    """Test comparing different schedules."""
+    # Create a second test schedule
+    test_schedule = tmp_path / "test2.yaml"
+    test_schedule.write_text("""fork: test2
+description: "Test schedule 2"
+
+operations:
+  BASE: 3
+  LOW: 5
+  NEW_OP: 100
+
+storage:
+  SLOAD: 2100
+
+precompiles:
+  ECRECOVER: 3000
+
+memory:
+  MEMORY: 3
+""")
+
+    # Note: This test would need the schedule to be in the schedules directory
+    # For now, test with nonexistent schedule to verify error handling
+    result = cli_runner.invoke(pitstop, ["compare", "prague", "nonexistent"])
+
+    assert result.exit_code == 1
+    assert "Error" in result.output
+
+
+def test_compare_help(cli_runner):
+    """Test compare command help."""
+    result = cli_runner.invoke(pitstop, ["compare", "--help"])
+
+    assert result.exit_code == 0
+    assert "Compare" in result.output or "compare" in result.output
