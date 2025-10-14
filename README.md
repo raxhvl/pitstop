@@ -1,6 +1,12 @@
 # Pitstop 🏁
 
-**Swap Ethereum gas schedules at racing speed; without the pit-crew!**
+<p align="center">
+  <img src="assets/logo.jpg" alt="Pitstop" width="200"/>
+</p>
+
+<h3 align="center">
+  Swap Ethereum gas schedules at racing speed; without the pit-crew!
+</h3>
 
 Prototyping gas schedule is bottlenecked by manual update of 5+ clients in 4+ languages. Pitstop helps automate this.
 
@@ -18,14 +24,14 @@ You want to test new gas costs. You need to:
 you run:
 
 ```yaml
-# schedules/fast-storage.yaml
+# schedules/prague.yaml
 storage:
   SSTORE_SET: 18000    # was 20000
 ```
 
 ```bash
-pitstop swap geth fast-storage
-# → output/geth/gas.go
+$ pitstop swap geth fast-storage go-ethereum/core/vm/gas.go
+🏁 Config updated!
 ```
 
 Researchers iterate faster. Client developers get consistent code. Everyone tests the same values.
