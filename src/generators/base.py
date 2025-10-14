@@ -35,6 +35,18 @@ class BaseGenerator(ABC):
         """Return the name of the template file."""
         pass
 
+    def generate_string(self, schedule: GasSchedule) -> str:
+        """Generate client code from schedule as a string.
+
+        Args:
+            schedule: Validated gas schedule
+
+        Returns:
+            Generated code as string
+        """
+        template = self.env.get_template(self.get_template_name())
+        return template.render(schedule=schedule)
+
     def generate(self, schedule: GasSchedule, output_path: Path) -> None:
         """Generate client code from schedule.
 
@@ -42,8 +54,7 @@ class BaseGenerator(ABC):
             schedule: Validated gas schedule
             output_path: Path to write generated code
         """
-        template = self.env.get_template(self.get_template_name())
-        code = template.render(schedule=schedule)
+        code = self.generate_string(schedule)
 
         output_path.parent.mkdir(parents=True, exist_ok=True)
         output_path.write_text(code)
