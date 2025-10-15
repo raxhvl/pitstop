@@ -27,6 +27,9 @@ build-backend = "setuptools.build_meta"
 [tool.setuptools.packages.find]
 where = ["src"]
 
+[tool.setuptools.package-data]
+templates = ["**/*.jinja2"]
+
 [tool.ruff]
 line-length = 88
 target-version = "py311"
