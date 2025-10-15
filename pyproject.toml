@@ -29,6 +29,7 @@ where = ["src"]
 
 [tool.setuptools.package-data]
 templates = ["**/*.jinja2"]
+schedules = ["*.yaml"]
 
 [tool.ruff]
 line-length = 88
