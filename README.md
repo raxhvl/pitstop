@@ -10,6 +10,24 @@
 
 Prototyping gas schedule is bottlenecked by manual update of 5+ clients in 4+ languages. Pitstop helps automate this.
 
+## Quick Start
+
+Two steps to start using Pitstop:
+
+1. **Install uv** ([docs](https://docs.astral.sh/uv/getting-started/installation/))
+
+   ```bash
+   curl -LsSf https://astral.sh/uv/install.sh | sh
+   ```
+
+2. **Run Pitstop**
+
+   ```bash
+   uvx --from git+https://github.com/raxhvl/pitstop pitstop swap geth prague output.go
+   ```
+
+That's it. No cloning, no setup.
+
 ## How it works
 
 You want to test new gas costs. You need to:
