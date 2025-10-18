@@ -1,5 +1,3 @@
-# Pitstop 🏁
-
 <p align="center">
   <img src="assets/logo.jpg" alt="Pitstop" width="200"/>
 </p>
@@ -41,10 +39,7 @@ graph TD
     F --> I[Reth]
     F --> J[Besu]
     F --> K[Erigon]
-
-    style C fill:#90EE90
-    style E fill:#87CEEB
-    style F fill:#FFD700
+    F --> L[...]
 ```
 
 ## Installation
