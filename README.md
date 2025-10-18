@@ -70,6 +70,8 @@ storage:
   SSTORE_SET: 18000    # was 20000
 ```
 
+### Generate configs
+
 Then generate the code for each client:
 
 ```bash
@@ -78,4 +80,52 @@ $ pitstop swap geth prague go-ethereum/core/vm/gas.go
 
 $ pitstop swap nethermind prague Nethermind.Evm/GasCostOf.cs
 🏁 Config updated!
+```
+
+### Pitstop in build system
+
+Before releasing, verify the config matches your schedule:
+
+```bash
+$ pitstop check geth prague go-ethereum/core/vm/gas.go
+✓ Config matches!
+```
+
+Integrate it into your build system to catch mismatches before compilation:
+
+```bash
+#!/bin/bash
+
+# Step 1: Verify config
+echo "Running Pitstop verification..."
+pitstop check geth prague go-ethereum/core/vm/gas.go
+
+# Step 2: Build only if verification passes
+if [ $? -ne 0 ]; then
+  echo "Pitstop verification failed! Aborting build."
+  exit 1
+fi
+
+echo "Pitstop verification passed. Building go-ethereum..."
+make --all go-ethereum/
+
+echo "Build complete!"
+```
+
+### Compare schedules
+
+Need to review what changed between forks? Compare schedules:
+
+```bash
+$ pitstop compare prague osaka
+🔍 Comparing schedules...
+
+operations:
+  - BASE: 2 → 3
+
+storage:
+  - SSTORE_SET: 20000 → 18000
+
+precompiles:
+  + BLS12_G1ADD: 500
 ```
