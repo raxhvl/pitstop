@@ -22,7 +22,32 @@ A better way would be to treat config like code. Write it once, generate everywh
 
 Define your parameters in YAML. Version control them. Review changes like you would a spec. Then generate correct implementations for every client. No copying. No typos. No inconsistencies.
 
-## Quick Start
+## Workflow
+
+**🛡️ Safety:** EELS and Pitstop are updated independently through separate PRs. 
+EELS PR must be merged before Pitstop YAML can be updated.
+If Pitstop has a bug or someone updates the YAML incorrectly, it can be caught by comparing against EELS. 
+This avoids a single point of failure where all clients get wrong values.
+
+```mermaid
+graph TD
+    A[EIP/Research] --> B[EELS PR]
+    B --> C[EELS Merged]
+    C --> D[Pitstop YAML PR]
+    D -->|References EELS| E[Pitstop YAML Merged]
+    E --> F[pitstop swap]
+    F --> G[Geth]
+    F --> H[Nethermind]
+    F --> I[Reth]
+    F --> J[Besu]
+    F --> K[Erigon]
+
+    style C fill:#90EE90
+    style E fill:#87CEEB
+    style F fill:#FFD700
+```
+
+## Installation
 
 Two steps to start using Pitstop:
 
@@ -40,7 +65,7 @@ Two steps to start using Pitstop:
 
 That's it. No cloning, no setup.
 
-## How it works
+## Usage
 
 You want to test a new gas schedule. You write it once:
 
