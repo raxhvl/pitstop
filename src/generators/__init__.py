@@ -1,9 +1,11 @@
 """Code generators for Ethereum clients."""
 
 from .geth import GethGenerator
+from .nethermind import NethermindGenerator
 
 GENERATORS = {
     "geth": GethGenerator,
+    "nethermind": NethermindGenerator,
 }
 
 
