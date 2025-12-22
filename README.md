@@ -3,7 +3,7 @@
 </p>
 
 <h3 align="center">
-  Swap Ethereum configs at racing speed; without the pit-crew!
+   Pitstop is a flexible, composable way to describe gas schedules across Ethereum forks. 
 </h3>
 
 ## Config as first class citizens
@@ -129,3 +129,72 @@ storage:
 precompiles:
   + BLS12_G1ADD: 500
 ```
+
+## Research Workflow
+
+Prototype gas schedule changes without waiting for EIP formalization.
+
+### Create an Experimental EIP
+
+```bash
+# Create a new EIP file
+cat > schedules/eips/research.cheap_sload.yaml <<EOF
+name: "Experiment: Reduce SLOAD cost to 100"
+
+categories:
+  operations:
+    SLOAD: 100
+EOF
+```
+
+### Define a Research Fork
+
+Edit `schedules/forks.yaml` and add:
+
+```yaml
+prague_cheap_sload:
+  extends: prague
+  eips: ["research.cheap_sload"]
+```
+
+### Generate and Test
+
+```bash
+# Generate client code
+pitstop swap geth prague_cheap_sload output.go
+
+# Compare with base fork
+pitstop compare prague prague_cheap_sload
+
+# Output shows:
+# Comparing prague vs prague_cheap_sload
+#
+# Operations:
+#   SLOAD: 800 → 100
+#
+# ✓ 1 changed
+```
+
+### Iterate Quickly
+
+```bash
+# Edit schedules/eips/research.cheap_sload.yaml
+# Change SLOAD to 150
+
+# Regenerate immediately
+pitstop swap geth prague_cheap_sload output.go
+
+# Test in your client
+cd go-ethereum && make all && ./build/bin/geth --dev
+```
+
+This workflow lets you test ideas in hours instead of weeks.
+
+## How It Works
+
+Pitstop uses an EIP-centric, composable architecture where:
+- Each EIP is a separate YAML file with gas cost changes
+- Forks are defined as ordered lists of EIPs with inheritance
+- Templates generate client-specific code from resolved schedules
+
+For detailed technical design and adding new schedules, see [docs/design.md](docs/design.md).
