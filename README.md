@@ -22,9 +22,9 @@ Define your parameters in YAML. Version control them. Review changes like you wo
 
 ## Workflow
 
-**🛡️ Safety:** EELS and Pitstop are updated independently through separate PRs. 
+**🛡️ Safety:** EELS and Pitstop are updated independently through separate PRs.
 EELS PR must be merged before Pitstop YAML can be updated.
-If Pitstop has a bug or someone updates the YAML incorrectly, it can be caught by comparing against EELS. 
+If Pitstop has a bug or someone updates the YAML incorrectly, it can be caught by comparing against EELS.
 This avoids a single point of failure where all clients get wrong values.
 
 ```mermaid
