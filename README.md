@@ -130,6 +130,8 @@ precompiles:
   + BLS12_G1ADD: 500
 ```
 
+For complete CLI reference and API details, see [docs/API.md](docs/API.md).
+
 ## Research Workflow
 
 Prototype gas schedule changes without waiting for EIP formalization.
