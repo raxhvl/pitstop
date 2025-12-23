@@ -353,11 +353,143 @@ To keep things sane:
 
 ---
 
-## 8. Template Directives
+## 8. EIP YAML Schema and Constant Resolution
+
+### 8.1 Schema Structure
+
+Each EIP file follows this structure:
+
+```yaml
+name: "Human-readable description"
+
+constants:
+  CONSTANT_NAME: value
+  # ... reusable constants
+
+gas_costs:
+  opcodes:
+    OPCODE_NAME: value_or_$CONSTANT
+    # ... all opcodes ordered by hex (0x00 - 0xFF)
+
+  precompiles:
+    PRECOMPILE_NAME:
+      BASE: value
+      WORD: value
+    # ... ordered by address
+
+  storage:
+    # Non-opcode storage costs
+
+  calldata:
+    # Per-byte transaction data costs
+
+  memory:
+    # Memory expansion and copy costs
+```
+
+### 8.2 Constants Section
+
+The `constants` section defines reusable values that can be referenced elsewhere using the `$` prefix.
+
+**Guidelines:**
+- Only include constants used **2 or more times** in the EIP
+- Single-use values should be inlined directly
+- Constant names should be descriptive (e.g., `GAS_VERY_LOW`, not `G3`)
+
+**Example:**
+```yaml
+constants:
+  GAS_ZERO: 0
+  GAS_BASE: 2
+  GAS_VERY_LOW: 3
+  GAS_CALL: 40      # Used in CALL, CALLCODE, DELEGATECALL
+  GAS_LOG: 375      # Used in LOG0-LOG4
+
+gas_costs:
+  opcodes:
+    STOP: $GAS_ZERO
+    ADDRESS: $GAS_BASE
+    ADD: $GAS_VERY_LOW
+    CALL: $GAS_CALL
+    CALLCODE: $GAS_CALL
+    LOG0: $GAS_LOG
+    LOG1: $GAS_LOG
+    JUMPDEST: 1       # Inlined - used only once
+```
+
+### 8.3 Constant Resolution Algorithm
+
+Constant references (strings starting with `$`) are resolved during fork resolution:
+
+1. **Merge all `constants` sections** from base EIP + all EIPs in fork chain (last-wins)
+2. **Parse all values** in `gas_costs` sections:
+   - If value is a string starting with `$` → resolve from merged constants dict
+   - If value is a number → use as-is
+3. **Merge all `gas_costs` sections** (last-wins) after constant resolution
+4. **Error handling:**
+   - If `$CONSTANT` not found in merged constants → **THROW** with clear error
+   - Example: `"Error: Constant $GAS_SLOAD not found in merged constants"`
+
+**Example resolution:**
+
+```yaml
+# frontier.yaml
+constants:
+  GAS_SLOAD: 50
+gas_costs:
+  opcodes:
+    SLOAD: $GAS_SLOAD  # Resolves to 50
+
+# 150.yaml (EIP-150 increases SLOAD cost)
+constants:
+  GAS_SLOAD: 200       # Override constant
+
+# After resolution for homestead fork (frontier + 150):
+# constants: {GAS_SLOAD: 200, ...}
+# opcodes: {SLOAD: 200, ...}  ← Automatically updated!
+```
+
+### 8.4 Benefits of Constant References
+
+1. **Update once, apply everywhere:** Change `GAS_SLOAD` constant in an EIP, all references update
+2. **Self-documenting:** `SLOAD: $GAS_SLOAD` shows intent vs magic number `SLOAD: 200`
+3. **Reduced duplication:** Shared costs (like tier costs) defined once
+4. **Explicit overrides:** EIPs explicitly show which constants they change
+
+### 8.5 Gas Costs Sections
+
+**`opcodes`:**
+- All EVM opcodes ordered by hex value (0x00 - 0xFF)
+- Includes all operation types: arithmetic, storage, memory, control flow, etc.
+
+**`precompiles`:**
+- Ordered by contract address (0x01, 0x02, ...)
+- Nested structure for base + per-word costs:
+  ```yaml
+  SHA256:
+    BASE: 60
+    WORD: 12
+  ```
+
+**`storage`:**
+- Non-opcode storage costs (SSTORE variants, refunds)
+- SLOAD/SSTORE opcodes go in `opcodes` section
+
+**`calldata`:**
+- Per-byte transaction data costs (zero vs non-zero bytes)
+- CALLDATALOAD/CALLDATACOPY opcodes go in `opcodes` section
+
+**`memory`:**
+- Memory expansion costs, per-word copy costs
+- MLOAD/MSTORE opcodes go in `opcodes` section
+
+---
+
+## 9. Template Directives
 
 Templates may need conditional logic when constants are introduced in different forks.
 
-### 8.1 `since(fork_name)`
+### 9.1 `since(fork_name)`
 
 Check if the current fork includes a specific fork in its ancestry chain.
 
@@ -411,9 +543,9 @@ This allows templates to evolve with the protocol without breaking older forks.
 
 ---
 
-## 9. Template Authoring Guide
+## 10. Template Authoring Guide
 
-### 9.1 Basic Template Structure
+### 10.1 Basic Template Structure
 
 ```go
 // {{ pitstop_header }}
@@ -429,7 +561,7 @@ const (
 )
 ```
 
-### 9.2 Handling Optional Categories
+### 10.2 Handling Optional Categories
 
 ```csharp
 // Nethermind example - blobs introduced in Cancun
@@ -440,7 +572,7 @@ public const long BlobWord = {{ schedule.blobs.BLOB_WORD }};
 {% endif %}
 ```
 
-### 9.3 Fork-Specific Constants
+### 10.3 Fork-Specific Constants
 
 Some clients have fork-specific variations of the same constant:
 

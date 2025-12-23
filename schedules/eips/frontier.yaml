@@ -1,0 +1,203 @@
+name: "Frontier schedule"
+
+constants:
+  GAS_ZERO: 0
+  GAS_BASE: 2
+  GAS_VERY_LOW: 3
+  GAS_LOW: 5
+  GAS_MID: 8
+  GAS_EXT: 20
+  GAS_CALL: 40
+  GAS_LOG: 375
+
+gas_costs:
+  opcodes:
+    # 0x00: Halting
+    STOP: $GAS_ZERO
+
+    # 0x01-0x0b: Arithmetic
+    ADD: $GAS_VERY_LOW
+    MUL: $GAS_LOW
+    SUB: $GAS_VERY_LOW
+    DIV: $GAS_LOW
+    SDIV: $GAS_LOW
+    MOD: $GAS_LOW
+    SMOD: $GAS_LOW
+    ADDMOD: $GAS_MID
+    MULMOD: $GAS_MID
+    EXP: 10
+    SIGNEXTEND: $GAS_LOW
+
+    # 0x10-0x1a: Comparison & Bitwise
+    LT: $GAS_VERY_LOW
+    GT: $GAS_VERY_LOW
+    SLT: $GAS_VERY_LOW
+    SGT: $GAS_VERY_LOW
+    EQ: $GAS_VERY_LOW
+    ISZERO: $GAS_VERY_LOW
+    AND: $GAS_VERY_LOW
+    OR: $GAS_VERY_LOW
+    XOR: $GAS_VERY_LOW
+    NOT: $GAS_VERY_LOW
+    BYTE: $GAS_VERY_LOW
+
+    # 0x20: Keccak256
+    SHA3: 30
+
+    # 0x30-0x3f: Environmental
+    ADDRESS: $GAS_BASE
+    BALANCE: $GAS_EXT
+    ORIGIN: $GAS_BASE
+    CALLER: $GAS_BASE
+    CALLVALUE: $GAS_BASE
+    CALLDATALOAD: $GAS_VERY_LOW
+    CALLDATASIZE: $GAS_BASE
+    CALLDATACOPY: $GAS_VERY_LOW
+    CODESIZE: $GAS_BASE
+    CODECOPY: $GAS_VERY_LOW
+    GASPRICE: $GAS_BASE
+    EXTCODESIZE: $GAS_EXT
+    EXTCODECOPY: $GAS_EXT
+
+    # 0x40-0x45: Block
+    BLOCKHASH: 20
+    COINBASE: $GAS_BASE
+    TIMESTAMP: $GAS_BASE
+    NUMBER: $GAS_BASE
+    DIFFICULTY: $GAS_BASE
+    GASLIMIT: $GAS_BASE
+
+    # 0x50-0x5b: Stack, Memory, Storage and Flow
+    POP: $GAS_BASE
+    MLOAD: $GAS_VERY_LOW
+    MSTORE: $GAS_VERY_LOW
+    MSTORE8: $GAS_VERY_LOW
+    SLOAD: 50
+    SSTORE: $GAS_ZERO  # Dynamic cost, see storage section
+    JUMP: $GAS_MID
+    JUMPI: 10
+    PC: $GAS_BASE
+    MSIZE: $GAS_BASE
+    GAS: $GAS_BASE
+    JUMPDEST: 1
+
+    # 0x60-0x7f: Push operations
+    PUSH1: $GAS_VERY_LOW
+    PUSH2: $GAS_VERY_LOW
+    PUSH3: $GAS_VERY_LOW
+    PUSH4: $GAS_VERY_LOW
+    PUSH5: $GAS_VERY_LOW
+    PUSH6: $GAS_VERY_LOW
+    PUSH7: $GAS_VERY_LOW
+    PUSH8: $GAS_VERY_LOW
+    PUSH9: $GAS_VERY_LOW
+    PUSH10: $GAS_VERY_LOW
+    PUSH11: $GAS_VERY_LOW
+    PUSH12: $GAS_VERY_LOW
+    PUSH13: $GAS_VERY_LOW
+    PUSH14: $GAS_VERY_LOW
+    PUSH15: $GAS_VERY_LOW
+    PUSH16: $GAS_VERY_LOW
+    PUSH17: $GAS_VERY_LOW
+    PUSH18: $GAS_VERY_LOW
+    PUSH19: $GAS_VERY_LOW
+    PUSH20: $GAS_VERY_LOW
+    PUSH21: $GAS_VERY_LOW
+    PUSH22: $GAS_VERY_LOW
+    PUSH23: $GAS_VERY_LOW
+    PUSH24: $GAS_VERY_LOW
+    PUSH25: $GAS_VERY_LOW
+    PUSH26: $GAS_VERY_LOW
+    PUSH27: $GAS_VERY_LOW
+    PUSH28: $GAS_VERY_LOW
+    PUSH29: $GAS_VERY_LOW
+    PUSH30: $GAS_VERY_LOW
+    PUSH31: $GAS_VERY_LOW
+    PUSH32: $GAS_VERY_LOW
+
+    # 0x80-0x8f: Dup operations
+    DUP1: $GAS_VERY_LOW
+    DUP2: $GAS_VERY_LOW
+    DUP3: $GAS_VERY_LOW
+    DUP4: $GAS_VERY_LOW
+    DUP5: $GAS_VERY_LOW
+    DUP6: $GAS_VERY_LOW
+    DUP7: $GAS_VERY_LOW
+    DUP8: $GAS_VERY_LOW
+    DUP9: $GAS_VERY_LOW
+    DUP10: $GAS_VERY_LOW
+    DUP11: $GAS_VERY_LOW
+    DUP12: $GAS_VERY_LOW
+    DUP13: $GAS_VERY_LOW
+    DUP14: $GAS_VERY_LOW
+    DUP15: $GAS_VERY_LOW
+    DUP16: $GAS_VERY_LOW
+
+    # 0x90-0x9f: Swap operations
+    SWAP1: $GAS_VERY_LOW
+    SWAP2: $GAS_VERY_LOW
+    SWAP3: $GAS_VERY_LOW
+    SWAP4: $GAS_VERY_LOW
+    SWAP5: $GAS_VERY_LOW
+    SWAP6: $GAS_VERY_LOW
+    SWAP7: $GAS_VERY_LOW
+    SWAP8: $GAS_VERY_LOW
+    SWAP9: $GAS_VERY_LOW
+    SWAP10: $GAS_VERY_LOW
+    SWAP11: $GAS_VERY_LOW
+    SWAP12: $GAS_VERY_LOW
+    SWAP13: $GAS_VERY_LOW
+    SWAP14: $GAS_VERY_LOW
+    SWAP15: $GAS_VERY_LOW
+    SWAP16: $GAS_VERY_LOW
+
+    # 0xa0-0xa4: Logging
+    LOG0: $GAS_LOG
+    LOG1: $GAS_LOG
+    LOG2: $GAS_LOG
+    LOG3: $GAS_LOG
+    LOG4: $GAS_LOG
+
+    # 0xf0-0xff: System operations
+    CREATE: 32000
+    CALL: $GAS_CALL
+    CALLCODE: $GAS_CALL
+    RETURN: $GAS_ZERO
+    DELEGATECALL: $GAS_CALL
+    SUICIDE: $GAS_ZERO
+
+  precompiles:
+    # 0x01: Elliptic curve recovery
+    ECRECOVER:
+      BASE: 3000
+
+    # 0x02: SHA2-256 hash
+    SHA256:
+      BASE: 60
+      WORD: 12
+
+    # 0x03: RIPEMD-160 hash
+    RIPEMD160:
+      BASE: 600
+      WORD: 120
+
+    # 0x04: Identity (data copy)
+    IDENTITY:
+      BASE: 15
+      WORD: 3
+
+  storage:
+    SSTORE_SET_COST: 20000
+    SSTORE_RESET_COST: 5000
+    REFUND_SCLEAR: 15000
+    REFUND_SUICIDE: 24000
+
+  calldata:
+    DATA_ZERO: 4
+    DATA_NON_ZERO: 68
+
+  memory:
+    MEMORY_WORD: 3
+    COPY_WORD: 3
+    SHA3_WORD: 6
+    EXPBYTE: 10
