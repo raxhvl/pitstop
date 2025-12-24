@@ -6,7 +6,7 @@ from pathlib import Path
 from jinja2 import Environment, PackageLoader
 
 from core.config import PITSTOP_HEADER
-from schedules.schema import GasSchedule
+from models.schema import ResolvedSchedule
 
 
 class BaseGenerator(ABC):
@@ -35,11 +35,11 @@ class BaseGenerator(ABC):
         """Return the name of the template file."""
         pass
 
-    def generate_string(self, schedule: GasSchedule) -> str:
+    def generate_string(self, schedule: ResolvedSchedule) -> str:
         """Generate client code from schedule as a string.
 
         Args:
-            schedule: Validated gas schedule
+            schedule: Resolved fork schedule
 
         Returns:
             Generated code as string
@@ -50,11 +50,11 @@ class BaseGenerator(ABC):
             pitstop_header=PITSTOP_HEADER,
         )
 
-    def generate(self, schedule: GasSchedule, output_path: Path) -> None:
+    def generate(self, schedule: ResolvedSchedule, output_path: Path) -> None:
         """Generate client code from schedule.
 
         Args:
-            schedule: Validated gas schedule
+            schedule: Resolved fork schedule
             output_path: Path to write generated code
         """
         code = self.generate_string(schedule)

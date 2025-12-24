@@ -164,7 +164,7 @@ gas_costs:
     CALLCODE: $GAS_CALL
     RETURN: $GAS_ZERO
     DELEGATECALL: $GAS_CALL
-    SUICIDE: $GAS_ZERO
+    SELFDESTRUCT: $GAS_ZERO
 
   precompiles:
     # 0x01: Elliptic curve recovery
@@ -190,7 +190,7 @@ gas_costs:
     SSTORE_SET_COST: 20000
     SSTORE_RESET_COST: 5000
     REFUND_SCLEAR: 15000
-    REFUND_SUICIDE: 24000
+    REFUND_SELFDESTRUCT: 24000
 
   calldata:
     DATA_ZERO: 4

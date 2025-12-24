@@ -5,7 +5,7 @@ from pathlib import Path
 import click
 
 from core.comparator import compare_schedules
-from core.loader import load_schedule
+from core.resolver import resolve_fork
 from core.verifier import verify_file
 from generators import get_generator
 
@@ -18,14 +18,14 @@ def pitstop():
 
 @pitstop.command()
 @click.argument("client", type=click.Choice(["geth", "nethermind"]), metavar="CLIENT")
-@click.argument("schedule", metavar="SCHEDULE")
+@click.argument("fork", metavar="FORK")
 @click.argument("output_path", type=click.Path(), metavar="OUTPUT_PATH")
-def swap(client: str, schedule: str, output_path: str):
-    """Generate client code from a gas schedule.
+def swap(client: str, fork: str, output_path: str):
+    """Generate client code from a fork.
 
     Args:
         client: Client name ('geth' or 'nethermind')
-        schedule: Name of the schedule (without .yaml extension)
+        fork: Name of the fork (e.g., 'frontier', 'prague')
         output_path: Path to write generated code
     """
     try:
@@ -41,11 +41,11 @@ def swap(client: str, schedule: str, output_path: str):
             )
             raise click.Abort()
 
-        # Load and validate schedule
-        gas_schedule = load_schedule(schedule)
+        # Resolve fork to get schedule
+        schedule = resolve_fork(fork)
 
         # Generate code
-        generator.generate(gas_schedule, output_file)
+        generator.generate(schedule, output_file)
 
         click.echo(f"🏁 Generated {client} code: {output_path}")
 
@@ -62,14 +62,14 @@ def swap(client: str, schedule: str, output_path: str):
 
 @pitstop.command()
 @click.argument("client", type=click.Choice(["geth", "nethermind"]), metavar="CLIENT")
-@click.argument("schedule", metavar="SCHEDULE")
+@click.argument("fork", metavar="FORK")
 @click.argument("file_path", type=click.Path(exists=True), metavar="FILE_PATH")
-def check(client: str, schedule: str, file_path: str):
+def check(client: str, fork: str, file_path: str):
     """Verify a file matches the expected generated code.
 
     Args:
         client: Client name ('geth' or 'nethermind')
-        schedule: Name of the schedule (without .yaml extension)
+        fork: Name of the fork (e.g., 'frontier', 'prague')
         file_path: Path to the file to verify
     """
     try:
@@ -85,11 +85,11 @@ def check(client: str, schedule: str, file_path: str):
             )
             raise click.Abort()
 
-        # Load and validate schedule
-        gas_schedule = load_schedule(schedule)
+        # Resolve fork to get schedule
+        schedule = resolve_fork(fork)
 
         # Generate expected code
-        expected_code = generator.generate_string(gas_schedule)
+        expected_code = generator.generate_string(schedule)
 
         # Verify file
         matches, diff = verify_file(expected_code, file)
@@ -114,22 +114,22 @@ def check(client: str, schedule: str, file_path: str):
 
 
 @pitstop.command()
-@click.argument("schedule1", metavar="SCHEDULE1")
-@click.argument("schedule2", metavar="SCHEDULE2")
-def compare(schedule1: str, schedule2: str):
-    """Compare two gas schedules.
+@click.argument("fork1", metavar="FORK1")
+@click.argument("fork2", metavar="FORK2")
+def compare(fork1: str, fork2: str):
+    """Compare two forks.
 
     Args:
-        schedule1: Name of the first schedule (without .yaml extension)
-        schedule2: Name of the second schedule (without .yaml extension)
+        fork1: Name of the first fork (e.g., 'frontier', 'prague')
+        fork2: Name of the second fork (e.g., 'frontier', 'prague')
     """
     try:
-        # Load both schedules
-        gas_schedule1 = load_schedule(schedule1)
-        gas_schedule2 = load_schedule(schedule2)
+        # Resolve both forks
+        schedule1 = resolve_fork(fork1)
+        schedule2 = resolve_fork(fork2)
 
         # Compare schedules
-        comparison = compare_schedules(gas_schedule1, gas_schedule2, schedule1, schedule2)
+        comparison = compare_schedules(schedule1, schedule2, fork1, fork2)
 
         # If identical
         if not comparison.has_differences():
@@ -137,18 +137,18 @@ def compare(schedule1: str, schedule2: str):
             return
 
         # Show differences
-        click.echo(f"Comparing {schedule1} vs {schedule2}\n")
+        click.echo(f"Comparing {fork1} vs {fork2}\n")
 
-        # Show fork/description changes
+        # Show fork/eips changes
         if comparison.fork_changed:
             old_fork, new_fork = comparison.fork_changed
             click.echo(f"Fork: {old_fork} → {new_fork}")
 
-        if comparison.description_changed:
-            old_desc, new_desc = comparison.description_changed
-            click.echo(f'Description: "{old_desc}" → "{new_desc}"')
+        if comparison.eips_changed:
+            old_eips, new_eips = comparison.eips_changed
+            click.echo(f"EIPs: {old_eips} → {new_eips}")
 
-        if comparison.fork_changed or comparison.description_changed:
+        if comparison.fork_changed or comparison.eips_changed:
             click.echo()
 
         # Helper to display section differences
@@ -170,6 +170,7 @@ def compare(schedule1: str, schedule2: str):
         show_section("Storage", comparison.storage)
         show_section("Precompiles", comparison.precompiles)
         show_section("Memory", comparison.memory)
+        show_section("Calldata", comparison.calldata)
 
         # Count total changes
         total_changed = sum([
@@ -177,18 +178,21 @@ def compare(schedule1: str, schedule2: str):
             len(comparison.storage.changed),
             len(comparison.precompiles.changed),
             len(comparison.memory.changed),
+            len(comparison.calldata.changed),
         ])
         total_added = sum([
             len(comparison.operations.added),
             len(comparison.storage.added),
             len(comparison.precompiles.added),
             len(comparison.memory.added),
+            len(comparison.calldata.added),
         ])
         total_removed = sum([
             len(comparison.operations.removed),
             len(comparison.storage.removed),
             len(comparison.precompiles.removed),
             len(comparison.memory.removed),
+            len(comparison.calldata.removed),
         ])
 
         # Summary

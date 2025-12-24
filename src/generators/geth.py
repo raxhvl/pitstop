@@ -17,4 +17,4 @@ class GethGenerator(BaseGenerator):
 
     def get_template_name(self) -> str:
         """Return the name of the template file."""
-        return "gas.go.jinja2"
+        return "protocol_params.go.jinja2"

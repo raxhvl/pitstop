@@ -3,7 +3,7 @@
 from dataclasses import dataclass
 from typing import Any
 
-from schedules.schema import GasSchedule
+from models.schema import ResolvedSchedule
 
 
 @dataclass
@@ -26,21 +26,23 @@ class ScheduleComparison:
     schedule1_name: str
     schedule2_name: str
     fork_changed: tuple[str, str] | None  # (old_fork, new_fork) or None
-    description_changed: tuple[str, str] | None  # (old_desc, new_desc) or None
+    eips_changed: tuple[list[str], list[str]] | None  # (old_eips, new_eips) or None
     operations: DictDiff
     storage: DictDiff
     precompiles: DictDiff
     memory: DictDiff
+    calldata: DictDiff
 
     def has_differences(self) -> bool:
         """Check if there are any differences."""
         return (
             self.fork_changed is not None
-            or self.description_changed is not None
+            or self.eips_changed is not None
             or not self.operations.is_empty()
             or not self.storage.is_empty()
             or not self.precompiles.is_empty()
             or not self.memory.is_empty()
+            or not self.calldata.is_empty()
         )
 
 
@@ -73,15 +75,15 @@ def _diff_dicts(dict1: dict[str, Any], dict2: dict[str, Any]) -> DictDiff:
 
 
 def compare_schedules(
-    schedule1: GasSchedule, schedule2: GasSchedule, name1: str, name2: str
+    schedule1: ResolvedSchedule, schedule2: ResolvedSchedule, name1: str, name2: str
 ) -> ScheduleComparison:
-    """Compare two gas schedules.
+    """Compare two resolved schedules.
 
     Args:
-        schedule1: First schedule
-        schedule2: Second schedule
-        name1: Name of first schedule
-        name2: Name of second schedule
+        schedule1: First resolved schedule
+        schedule2: Second resolved schedule
+        name1: Name of first schedule (fork name)
+        name2: Name of second schedule (fork name)
 
     Returns:
         ScheduleComparison with all differences
@@ -90,17 +92,18 @@ def compare_schedules(
     if schedule1.fork != schedule2.fork:
         fork_changed = (schedule1.fork, schedule2.fork)
 
-    description_changed = None
-    if schedule1.description != schedule2.description:
-        description_changed = (schedule1.description, schedule2.description)
+    eips_changed = None
+    if schedule1.eips != schedule2.eips:
+        eips_changed = (schedule1.eips, schedule2.eips)
 
     return ScheduleComparison(
         schedule1_name=name1,
         schedule2_name=name2,
         fork_changed=fork_changed,
-        description_changed=description_changed,
-        operations=_diff_dicts(schedule1.operations, schedule2.operations),
+        eips_changed=eips_changed,
+        operations=_diff_dicts(schedule1.opcodes, schedule2.opcodes),
         storage=_diff_dicts(schedule1.storage, schedule2.storage),
         precompiles=_diff_dicts(schedule1.precompiles, schedule2.precompiles),
         memory=_diff_dicts(schedule1.memory, schedule2.memory),
+        calldata=_diff_dicts(schedule1.calldata, schedule2.calldata),
     )

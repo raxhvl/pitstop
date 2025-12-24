@@ -2,7 +2,12 @@
 
 ## 1. Overview
 
-Pitstop is a flexible, composable way to describe gas schedules across Ethereum forks. 
+Pitstop is a flexible, composable framework for managing protocol configuration changes across Ethereum forks.
+
+**Current scope:** Gas schedules
+**Future vision:** General protocol configuration (consensus params, gas costs, limits, etc.)
+
+While the initial implementation focuses on gas schedules, the architecture is designed to support any protocol configuration that evolves through EIPs and forks. The EIP-centric composition model and constant resolution mechanism apply broadly to any versioned configuration. 
 
 **Core idea:**
 
