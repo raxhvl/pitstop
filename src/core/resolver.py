@@ -230,6 +230,11 @@ def resolve_gas_costs(gas_costs: GasCosts, constants: dict[str, int]) -> GasCost
         for name, value in gas_costs.calldata.items()
     }
 
+    resolved_transaction = {
+        name: resolve_value(value, constants)
+        for name, value in gas_costs.transaction.items()
+    }
+
     resolved_memory = {
         name: resolve_value(value, constants)
         for name, value in gas_costs.memory.items()
@@ -240,6 +245,7 @@ def resolve_gas_costs(gas_costs: GasCosts, constants: dict[str, int]) -> GasCost
         precompiles=resolved_precompiles,
         storage=resolved_storage,
         calldata=resolved_calldata,
+        transaction=resolved_transaction,
         memory=resolved_memory,
     )
 
@@ -259,6 +265,7 @@ def merge_gas_costs(base: GasCosts, override: GasCosts) -> GasCosts:
     merged_precompiles = {**base.precompiles, **override.precompiles}
     merged_storage = {**base.storage, **override.storage}
     merged_calldata = {**base.calldata, **override.calldata}
+    merged_transaction = {**base.transaction, **override.transaction}
     merged_memory = {**base.memory, **override.memory}
 
     return GasCosts(
@@ -266,6 +273,7 @@ def merge_gas_costs(base: GasCosts, override: GasCosts) -> GasCosts:
         precompiles=merged_precompiles,
         storage=merged_storage,
         calldata=merged_calldata,
+        transaction=merged_transaction,
         memory=merged_memory,
     )
 

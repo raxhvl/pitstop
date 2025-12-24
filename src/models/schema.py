@@ -16,6 +16,7 @@ PrecompileMap = dict[str, Value]  # {BASE: value, WORD: value, ...}
 PrecompilesMap = dict[str, PrecompileMap]
 StorageMap = dict[str, Value]
 CalldataMap = dict[str, Value]
+TransactionMap = dict[str, Value]
 MemoryMap = dict[str, Value]
 
 
@@ -37,6 +38,9 @@ class GasCosts(BaseModel):
     )
     calldata: CalldataMap = Field(
         default_factory=dict, description="Calldata costs (per-byte)"
+    )
+    transaction: TransactionMap = Field(
+        default_factory=dict, description="Transaction-level costs"
     )
     memory: MemoryMap = Field(
         default_factory=dict, description="Memory expansion and copy costs"
@@ -108,6 +112,11 @@ class ResolvedSchedule(BaseModel):
     def calldata(self) -> dict[str, int]:
         """Get calldata costs."""
         return self.gas_costs.calldata
+
+    @property
+    def transaction(self) -> dict[str, int]:
+        """Get transaction costs."""
+        return self.gas_costs.transaction
 
     @property
     def memory(self) -> dict[str, int]:

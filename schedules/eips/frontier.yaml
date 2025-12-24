@@ -196,8 +196,13 @@ gas_costs:
     DATA_ZERO: 4
     DATA_NON_ZERO: 68
 
+
+  transaction:
+    BASE: 21000
+
   memory:
     MEMORY_WORD: 3
     COPY_WORD: 3
     SHA3_WORD: 6
     EXPBYTE: 10
+    QUADRATIC_DENOMINATOR: 512
