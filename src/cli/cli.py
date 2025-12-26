@@ -17,14 +17,14 @@ def pitstop():
 
 
 @pitstop.command()
-@click.argument("client", type=click.Choice(["geth", "nethermind"]), metavar="CLIENT")
+@click.argument("client", type=click.Choice(["erigon", "geth", "nethermind"]), metavar="CLIENT")
 @click.argument("fork", metavar="FORK")
 @click.argument("output_path", type=click.Path(), metavar="OUTPUT_PATH")
 def swap(client: str, fork: str, output_path: str):
     """Generate client code from a fork.
 
     Args:
-        client: Client name ('geth' or 'nethermind')
+        client: Client name ('erigon', 'geth', or 'nethermind')
         fork: Name of the fork (e.g., 'frontier', 'prague')
         output_path: Path to write generated code
     """
@@ -61,14 +61,14 @@ def swap(client: str, fork: str, output_path: str):
 
 
 @pitstop.command()
-@click.argument("client", type=click.Choice(["geth", "nethermind"]), metavar="CLIENT")
+@click.argument("client", type=click.Choice(["erigon", "geth", "nethermind"]), metavar="CLIENT")
 @click.argument("fork", metavar="FORK")
 @click.argument("file_path", type=click.Path(exists=True), metavar="FILE_PATH")
 def check(client: str, fork: str, file_path: str):
     """Verify a file matches the expected generated code.
 
     Args:
-        client: Client name ('geth' or 'nethermind')
+        client: Client name ('erigon', 'geth', or 'nethermind')
         fork: Name of the fork (e.g., 'frontier', 'prague')
         file_path: Path to the file to verify
     """

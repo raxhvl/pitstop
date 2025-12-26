@@ -41,7 +41,7 @@ const (
 	TxGas                 uint64 = {{ schedule.transaction.BASE }} // Per transaction not creating a contract. NOTE: Not payable on data of calls between transactions.
 	TxGasContractCreation uint64 = 53000 // Per transaction that creates a contract. NOTE: Not payable on data of calls between transactions.
 	TxDataZeroGas         uint64 = {{ schedule.calldata.DATA_ZERO }}     // Per byte of data attached to a transaction that equals zero. NOTE: Not payable on data of calls between transactions.
-	QuadCoeffDiv          uint64 = {{ schedule.memory.QUADRATIC_DENOMINATOR }}   // Divisor for the quadratic particle of the memory cost equation.
+	QuadCoeffDiv          uint64 = {{ schedule.memory.QUADRATIC_DIVISOR}}   // Divisor for the quadratic particle of the memory cost equation.
 	LogDataGas            uint64 = 8     // Per byte in a LOG* operation's data.
 	CallStipend           uint64 = 2300  // Free gas given at beginning of call.
 
