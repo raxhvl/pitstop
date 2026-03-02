@@ -577,21 +577,46 @@ public const long BlobWord = {{ schedule.blobs.BLOB_WORD }};
 {% endif %}
 ```
 
-### 10.3 Fork-Specific Constants
+### 10.3 Fork Pinning with `fork()`
 
-Some clients have fork-specific variations of the same constant:
+Client source files contain multiple versions of the same constant, one per fork era:
 
-```csharp
-// Base value
-public const long Balance = {{ schedule.operations.BALANCE }};
-
-// EIP-150 override (if applicable)
-{% if schedule.since('homestead') %}
-public const long BalanceEip150 = 400;
-{% endif %}
-
-// EIP-1884 override (if applicable)
-{% if schedule.since('istanbul') %}
-public const long BalanceEip1884 = 700;
-{% endif %}
+```go
+CallGasFrontier uint64 = 40   // Frontier value
+CallGasEIP150   uint64 = 700  // Tangerine Whistle value
 ```
+
+A naive approach would use `schedule.opcodes.CALL` for both lines. But generating for any fork would put that fork's value into *every* line, corrupting historical constants.
+
+Templates solve this with the `fork()` function, which resolves any fork on demand (cached via `lru_cache`). Each line is pinned to the fork that introduced it:
+
+```jinja2
+CallGasFrontier = {{ fork('frontier').opcodes.CALL }}              {# always 40 #}
+CallGasEIP150   = {{ fork('tangerine-whistle').opcodes.CALL }}     {# always 700 #}
+```
+
+This means:
+- `pitstop swap geth osaka` produces a clean diff (only pitstop header)
+- `pitstop swap geth amsterdam` shows only the repricing changes from Amsterdam EIPs
+- Lines without fork suffixes use `schedule.*` which tracks the target fork
+
+**When to pin with `fork()`:**
+- Multiple variants of the same constant exist in the file (e.g., `CallGasFrontier` and `CallGasEIP150`)
+- Pin each to its introducing fork
+
+**When to use `schedule.*`:**
+- The constant has no fork variants (single occurrence)
+- These track the target fork and are candidates for repricing
+- If the constant was introduced in a later fork (e.g., `SelfBalance` from Istanbul), it renders empty for earlier forks — that's expected
+
+### 10.4 Expected Empty Values
+
+When generating for a fork that predates a constant's introduction, `schedule.*` renders empty. For example, generating for `frontier` produces:
+
+```go
+// Berlin constants render empty for frontier — these opcodes didn't exist yet
+ColdAccountAccessCostEIP2929 = uint64()  // empty, expected
+SelfBalance = ;                          // empty, expected
+```
+
+This is correct behavior. The verification script (`scripts/verify_forks.sh`) accounts for this and reports them as "expected empty" rather than failures.

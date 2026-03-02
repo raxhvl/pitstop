@@ -199,33 +199,15 @@ Pitstop uses an EIP-centric, composable architecture where:
 - Forks are defined as ordered lists of EIPs with inheritance
 - Templates generate client-specific code from resolved schedules
 
-### Fork pinning in templates
+### Verify generated output
 
-Client source files contain multiple versions of the same constant, one per fork era:
+Use the verification script to check all forks produce clean output:
 
-```go
-CallGasFrontier uint64 = 40   // Frontier value
-CallGasEIP150   uint64 = 700  // Tangerine Whistle value
+```bash
+./scripts/verify_forks.sh geth /path/to/protocol_params.go
+./scripts/verify_forks.sh nethermind /path/to/GasCostOf.cs
 ```
 
-A naive approach would use a single template variable (`schedule.opcodes.CALL`) for both lines. But then generating for any fork would put that fork's value into *every* line, corrupting historical constants.
+A clean fork shows only the pitstop header in the diff. Older forks may show "expected empty" values for constants introduced in later forks — this is correct behavior.
 
-Pitstop solves this with the `fork()` function. Templates pin each line to the fork that introduced it:
-
-```jinja2
-CallGasFrontier = {{ fork('frontier').opcodes.CALL }}              {# always 40 #}
-CallGasEIP150   = {{ fork('tangerine-whistle').opcodes.CALL }}     {# always 700 #}
-```
-
-The `fork()` function resolves any fork on demand (cached via `lru_cache`). This means:
-- `pitstop swap geth osaka` produces a clean diff (only the pitstop header) because every line resolves to its correct historical value
-- `pitstop swap geth amsterdam` shows only the repricing changes introduced by Amsterdam EIPs
-- Lines without fork suffixes use `schedule.*` which tracks the target fork, so repricing experiments affect the right constants
-
-**When to pin with `fork()`:**
-- **Multiple variants of the same constant** — e.g., `CallGasFrontier` and `CallGasEIP150` both represent the CALL cost at different eras. Pin each to its fork.
-
-**When to use `schedule.*`:**
-- The constant has no fork variants. These track the target fork and are candidates for repricing. If the constant was introduced in a later fork (e.g., `SelfBalance` from Istanbul), it will be empty for earlier forks — that's expected since the opcode didn't exist then.
-
-For detailed technical design and adding new schedules, see [docs/design.md](docs/design.md).
+For technical details on fork pinning, template authoring, and the `fork()` function, see [docs/design.md](docs/design.md).
