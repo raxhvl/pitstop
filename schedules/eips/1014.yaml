@@ -1,0 +1,5 @@
+name: "EIP-1014 Skinny CREATE2"
+
+gas_costs:
+  opcodes:
+    CREATE2: 32000

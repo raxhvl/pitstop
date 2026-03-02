@@ -10,3 +10,6 @@ forks:
   byzantium:
     extends: spurious-dragon
     eips: ["140", "196", "197", "211", "214"]
+  constantinople:
+    extends: byzantium
+    eips: ["145", "1014", "1052"]

@@ -1,0 +1,5 @@
+name: "EIP-1052 EXTCODEHASH opcode"
+
+gas_costs:
+  opcodes:
+    EXTCODEHASH: 400

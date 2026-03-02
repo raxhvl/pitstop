@@ -1,0 +1,7 @@
+name: "EIP-145 Bitwise shifting instructions"
+
+gas_costs:
+  opcodes:
+    SHL: $GAS_VERY_LOW
+    SHR: $GAS_VERY_LOW
+    SAR: $GAS_VERY_LOW
