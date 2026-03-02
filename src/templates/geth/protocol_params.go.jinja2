@@ -34,8 +34,8 @@ const (
 	MaxTxGas uint64 = 1 << 24 // Maximum transaction gas limit after eip-7825 (16,777,216).
 
 	MaximumExtraDataSize  uint64 = 32    // Maximum size extra data may be after Genesis.
-	ExpByteGas            uint64 = {{ schedule.memory.EXPBYTE }}    // Times ceil(log256(exponent)) for the EXP instruction.
-	SloadGas              uint64 = {{ schedule.opcodes.SLOAD }}    //
+	ExpByteGas            uint64 = {{ fork('frontier').memory.EXPBYTE }}    // Times ceil(log256(exponent)) for the EXP instruction.
+	SloadGas              uint64 = {{ fork('frontier').opcodes.SLOAD }}    //
 	CallValueTransferGas  uint64 = 9000  // Paid for CALL when the value transfer is non-zero.
 	CallNewAccountGas     uint64 = 25000 // Paid for CALL when the destination address didn't exist prior.
 	TxGas                 uint64 = {{ schedule.transaction.BASE }} // Per transaction not creating a contract. NOTE: Not payable on data of calls between transactions.
@@ -95,8 +95,8 @@ const (
 	SelfdestructRefundGas uint64 = {{ schedule.storage.REFUND_SELFDESTRUCT }} // Refunded following a selfdestruct operation.
 	MemoryGas             uint64 = {{ schedule.memory.MEMORY_WORD }}     // Times the address of the (highest referenced byte in memory + 1). NOTE: referencing happens on read, write and in instructions such as RETURN and CALL.
 
-	TxDataNonZeroGasFrontier  uint64 = {{ schedule.calldata.DATA_NON_ZERO }}    // Per byte of data attached to a transaction that is not equal to zero. NOTE: Not payable on data of calls between transactions.
-	TxDataNonZeroGasEIP2028   uint64 = {{ schedule.calldata.DATA_NON_ZERO }}    // Per byte of non zero data attached to a transaction after EIP 2028 (part in Istanbul)
+	TxDataNonZeroGasFrontier  uint64 = {{ fork('frontier').calldata.DATA_NON_ZERO }}    // Per byte of data attached to a transaction that is not equal to zero. NOTE: Not payable on data of calls between transactions.
+	TxDataNonZeroGasEIP2028   uint64 = {{ fork('istanbul').calldata.DATA_NON_ZERO }}    // Per byte of non zero data attached to a transaction after EIP 2028 (part in Istanbul)
 	TxTokenPerNonZeroByte     uint64 = 4     // Token cost per non-zero byte as specified by EIP-7623.
 	TxCostFloorPerToken       uint64 = 10    // Cost floor per byte of data as specified by EIP-7623.
 	TxAccessListAddressGas    uint64 = 2400  // Per address specified in EIP 2930 access list
@@ -104,29 +104,29 @@ const (
 	TxAuthTupleGas            uint64 = 12500 // Per auth tuple code specified in EIP-7702
 
 	// These have been changed during the course of the chain
-	CallGasFrontier              uint64 = {{ schedule.opcodes.CALL }}  // Once per CALL operation & message call transaction.
-	CallGasEIP150                uint64 = {{ schedule.opcodes.CALL }} // Static portion of gas for CALL-derivates after EIP 150 (Tangerine)
-	BalanceGasFrontier           uint64 = {{ schedule.opcodes.BALANCE }}  // The cost of a BALANCE operation
-	BalanceGasEIP150             uint64 = {{ schedule.opcodes.BALANCE }} // The cost of a BALANCE operation after Tangerine
-	BalanceGasEIP1884            uint64 = {{ schedule.opcodes.BALANCE }} // The cost of a BALANCE operation after EIP 1884 (part of Istanbul)
-	ExtcodeSizeGasFrontier       uint64 = {{ schedule.opcodes.EXTCODESIZE }}  // Cost of EXTCODESIZE before EIP 150 (Tangerine)
-	ExtcodeSizeGasEIP150         uint64 = {{ schedule.opcodes.EXTCODESIZE }} // Cost of EXTCODESIZE after EIP 150 (Tangerine)
-	SloadGasFrontier             uint64 = {{ schedule.opcodes.SLOAD }}
-	SloadGasEIP150               uint64 = {{ schedule.opcodes.SLOAD }}
-	SloadGasEIP1884              uint64 = {{ schedule.opcodes.SLOAD }}  // Cost of SLOAD after EIP 1884 (part of Istanbul)
-	SloadGasEIP2200              uint64 = 800  // Cost of SLOAD after EIP 2200 (part of Istanbul)
-	ExtcodeHashGasConstantinople uint64 = {{ schedule.opcodes.EXTCODEHASH }}  // Cost of EXTCODEHASH (introduced in Constantinople)
-	ExtcodeHashGasEIP1884        uint64 = {{ schedule.opcodes.EXTCODEHASH }}  // Cost of EXTCODEHASH after EIP 1884 (part in Istanbul)
-	SelfdestructGasEIP150        uint64 = {{ schedule.opcodes.SELFDESTRUCT }} // Cost of SELFDESTRUCT post EIP 150 (Tangerine)
+	CallGasFrontier              uint64 = {{ fork('frontier').opcodes.CALL }}  // Once per CALL operation & message call transaction.
+	CallGasEIP150                uint64 = {{ fork('tangerine-whistle').opcodes.CALL }} // Static portion of gas for CALL-derivates after EIP 150 (Tangerine)
+	BalanceGasFrontier           uint64 = {{ fork('frontier').opcodes.BALANCE }}  // The cost of a BALANCE operation
+	BalanceGasEIP150             uint64 = {{ fork('tangerine-whistle').opcodes.BALANCE }} // The cost of a BALANCE operation after Tangerine
+	BalanceGasEIP1884            uint64 = {{ fork('istanbul').opcodes.BALANCE }} // The cost of a BALANCE operation after EIP 1884 (part of Istanbul)
+	ExtcodeSizeGasFrontier       uint64 = {{ fork('frontier').opcodes.EXTCODESIZE }}  // Cost of EXTCODESIZE before EIP 150 (Tangerine)
+	ExtcodeSizeGasEIP150         uint64 = {{ fork('tangerine-whistle').opcodes.EXTCODESIZE }} // Cost of EXTCODESIZE after EIP 150 (Tangerine)
+	SloadGasFrontier             uint64 = {{ fork('frontier').opcodes.SLOAD }}
+	SloadGasEIP150               uint64 = {{ fork('tangerine-whistle').opcodes.SLOAD }}
+	SloadGasEIP1884              uint64 = {{ fork('istanbul').opcodes.SLOAD }}  // Cost of SLOAD after EIP 1884 (part of Istanbul)
+	SloadGasEIP2200              uint64 = {{ fork('istanbul').opcodes.SLOAD }}  // Cost of SLOAD after EIP 2200 (part of Istanbul)
+	ExtcodeHashGasConstantinople uint64 = {{ fork('constantinople').opcodes.EXTCODEHASH }}  // Cost of EXTCODEHASH (introduced in Constantinople)
+	ExtcodeHashGasEIP1884        uint64 = {{ fork('istanbul').opcodes.EXTCODEHASH }}  // Cost of EXTCODEHASH after EIP 1884 (part in Istanbul)
+	SelfdestructGasEIP150        uint64 = {{ fork('tangerine-whistle').opcodes.SELFDESTRUCT }} // Cost of SELFDESTRUCT post EIP 150 (Tangerine)
 
 	// EXP has a dynamic portion depending on the size of the exponent
-	ExpByteFrontier uint64 = {{ schedule.memory.EXPBYTE }} // was set to 10 in Frontier
-	ExpByteEIP158   uint64 = {{ schedule.memory.EXPBYTE }} // was raised to 50 during Eip158 (Spurious Dragon)
+	ExpByteFrontier uint64 = {{ fork('frontier').memory.EXPBYTE }} // was set to 10 in Frontier
+	ExpByteEIP158   uint64 = {{ fork('spurious-dragon').memory.EXPBYTE }} // was raised to 50 during Eip158 (Spurious Dragon)
 
 	// Extcodecopy has a dynamic AND a static cost. This represents only the
 	// static portion of the gas. It was changed during EIP 150 (Tangerine)
-	ExtcodeCopyBaseFrontier uint64 = {{ schedule.opcodes.EXTCODECOPY }}
-	ExtcodeCopyBaseEIP150   uint64 = {{ schedule.opcodes.EXTCODECOPY }}
+	ExtcodeCopyBaseFrontier uint64 = {{ fork('frontier').opcodes.EXTCODECOPY }}
+	ExtcodeCopyBaseEIP150   uint64 = {{ fork('tangerine-whistle').opcodes.EXTCODECOPY }}
 
 	// CreateBySelfdestructGas is used when the refunded account is one that does
 	// not exist. This logic is similar to call.
@@ -150,14 +150,14 @@ const (
 	IdentityBaseGas     uint64 = {{ schedule.precompiles.IDENTITY.BASE }}   // Base price for a data copy operation
 	IdentityPerWordGas  uint64 = {{ schedule.precompiles.IDENTITY.WORD }}    // Per-work price for a data copy operation
 
-	Bn256AddGasByzantium             uint64 = {{ schedule.precompiles.ECADD.BASE }}    // Byzantium gas needed for an elliptic curve addition
-	Bn256AddGasIstanbul              uint64 = {{ schedule.precompiles.ECADD.BASE }}    // Gas needed for an elliptic curve addition
-	Bn256ScalarMulGasByzantium       uint64 = {{ schedule.precompiles.ECMUL.BASE }}  // Byzantium gas needed for an elliptic curve scalar multiplication
-	Bn256ScalarMulGasIstanbul        uint64 = {{ schedule.precompiles.ECMUL.BASE }}   // Gas needed for an elliptic curve scalar multiplication
-	Bn256PairingBaseGasByzantium     uint64 = {{ schedule.precompiles.ECPAIRING.BASE }} // Byzantium base price for an elliptic curve pairing check
-	Bn256PairingBaseGasIstanbul      uint64 = {{ schedule.precompiles.ECPAIRING.BASE }}  // Base price for an elliptic curve pairing check
-	Bn256PairingPerPointGasByzantium uint64 = {{ schedule.precompiles.ECPAIRING.PAIR }}  // Byzantium per-point price for an elliptic curve pairing check
-	Bn256PairingPerPointGasIstanbul  uint64 = {{ schedule.precompiles.ECPAIRING.PAIR }}  // Per-point price for an elliptic curve pairing check
+	Bn256AddGasByzantium             uint64 = {{ fork('byzantium').precompiles.ECADD.BASE }}    // Byzantium gas needed for an elliptic curve addition
+	Bn256AddGasIstanbul              uint64 = {{ fork('istanbul').precompiles.ECADD.BASE }}    // Gas needed for an elliptic curve addition
+	Bn256ScalarMulGasByzantium       uint64 = {{ fork('byzantium').precompiles.ECMUL.BASE }}  // Byzantium gas needed for an elliptic curve scalar multiplication
+	Bn256ScalarMulGasIstanbul        uint64 = {{ fork('istanbul').precompiles.ECMUL.BASE }}   // Gas needed for an elliptic curve scalar multiplication
+	Bn256PairingBaseGasByzantium     uint64 = {{ fork('byzantium').precompiles.ECPAIRING.BASE }} // Byzantium base price for an elliptic curve pairing check
+	Bn256PairingBaseGasIstanbul      uint64 = {{ fork('istanbul').precompiles.ECPAIRING.BASE }}  // Base price for an elliptic curve pairing check
+	Bn256PairingPerPointGasByzantium uint64 = {{ fork('byzantium').precompiles.ECPAIRING.PAIR }}  // Byzantium per-point price for an elliptic curve pairing check
+	Bn256PairingPerPointGasIstanbul  uint64 = {{ fork('istanbul').precompiles.ECPAIRING.PAIR }}  // Per-point price for an elliptic curve pairing check
 
 	Bls12381G1AddGas          uint64 = 375   // Price for BLS12-381 elliptic curve G1 point addition
 	Bls12381G1MulGas          uint64 = 12000 // Price for BLS12-381 elliptic curve G1 point scalar multiplication

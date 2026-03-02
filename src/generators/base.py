@@ -6,6 +6,7 @@ from pathlib import Path
 from jinja2 import Environment, PackageLoader
 
 from core.config import PITSTOP_HEADER
+from core.resolver import resolve_fork
 from models.schema import ResolvedSchedule
 
 
@@ -47,6 +48,7 @@ class BaseGenerator(ABC):
         template = self.env.get_template(self.get_template_name())
         return template.render(
             schedule=schedule,
+            fork=resolve_fork,
             pitstop_header=PITSTOP_HEADER,
         )
 

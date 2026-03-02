@@ -199,4 +199,27 @@ Pitstop uses an EIP-centric, composable architecture where:
 - Forks are defined as ordered lists of EIPs with inheritance
 - Templates generate client-specific code from resolved schedules
 
+### Fork pinning in templates
+
+Client source files contain multiple versions of the same constant, one per fork era:
+
+```go
+CallGasFrontier uint64 = 40   // Frontier value
+CallGasEIP150   uint64 = 700  // Tangerine Whistle value
+```
+
+A naive approach would use a single template variable (`schedule.opcodes.CALL`) for both lines. But then generating for any fork would put that fork's value into *every* line, corrupting historical constants.
+
+Pitstop solves this with the `fork()` function. Templates pin each line to the fork that introduced it:
+
+```jinja2
+CallGasFrontier = {{ fork('frontier').opcodes.CALL }}              {# always 40 #}
+CallGasEIP150   = {{ fork('tangerine-whistle').opcodes.CALL }}     {# always 700 #}
+```
+
+The `fork()` function resolves any fork on demand (cached via `lru_cache`). This means:
+- `pitstop swap geth osaka` produces a clean diff (only the pitstop header) because every line resolves to its correct historical value
+- `pitstop swap geth amsterdam` shows only the repricing changes introduced by Amsterdam EIPs
+- Lines without fork suffixes use `schedule.*` which tracks the target fork, so repricing experiments affect the right constants
+
 For detailed technical design and adding new schedules, see [docs/design.md](docs/design.md).
