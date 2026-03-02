@@ -1,0 +1,5 @@
+name: "EIP-214 STATICCALL"
+
+gas_costs:
+  opcodes:
+    STATICCALL: 700

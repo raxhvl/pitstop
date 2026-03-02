@@ -1,0 +1,7 @@
+name: "EIP-197 BN256 pairing check"
+
+gas_costs:
+  precompiles:
+    ECPAIRING:
+      BASE: 100000
+      PAIR: 80000

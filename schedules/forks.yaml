@@ -7,3 +7,6 @@ forks:
   spurious-dragon:
     extends: tangerine-whistle
     eips: ["160"]
+  byzantium:
+    extends: spurious-dragon
+    eips: ["140", "196", "197", "211", "214"]

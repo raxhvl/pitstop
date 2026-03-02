@@ -1,0 +1,8 @@
+name: "EIP-196 BN256 addition and scalar multiplication"
+
+gas_costs:
+  precompiles:
+    ECADD:
+      BASE: 500
+    ECMUL:
+      BASE: 40000

@@ -1,0 +1,5 @@
+name: "EIP-140 REVERT instruction"
+
+gas_costs:
+  opcodes:
+    REVERT: $GAS_ZERO
