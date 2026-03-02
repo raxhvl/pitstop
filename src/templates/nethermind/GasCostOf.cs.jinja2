@@ -74,7 +74,7 @@ namespace Nethermind.Evm
         public const long TxDataNonZeroMultiplierEip2028 = TxDataNonZeroEip2028 / TxDataZero;
 
         public const long MinModExpEip2565 = {{ fork('berlin').precompiles.MODEXP.MIN_GAS }}; // eip-2565
-        public const long MinModExpEip7883 = 500; // eip-7883
+        public const long MinModExpEip7883 = {{ fork('osaka').precompiles.MODEXP.MIN_GAS }}; // eip-7883
 
         // Eof Execution EIP-7692
         public const long DataLoad = 4;

@@ -31,3 +31,6 @@ forks:
   prague:
     extends: cancun
     eips: ["2537", "7623", "7702"]
+  osaka:
+    extends: prague
+    eips: ["7883", "7939", "7951"]

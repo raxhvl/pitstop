@@ -1,0 +1,5 @@
+name: "EIP-7939 Count leading zeros (CLZ) opcode"
+
+gas_costs:
+  opcodes:
+    CLZ: 5

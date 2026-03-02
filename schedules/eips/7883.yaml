@@ -1,0 +1,6 @@
+name: "EIP-7883 ModExp gas cost increase"
+
+gas_costs:
+  precompiles:
+    MODEXP:
+      MIN_GAS: 500
