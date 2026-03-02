@@ -97,11 +97,11 @@ const (
 
 	TxDataNonZeroGasFrontier  uint64 = {{ fork('frontier').calldata.DATA_NON_ZERO }}    // Per byte of data attached to a transaction that is not equal to zero. NOTE: Not payable on data of calls between transactions.
 	TxDataNonZeroGasEIP2028   uint64 = {{ fork('istanbul').calldata.DATA_NON_ZERO }}    // Per byte of non zero data attached to a transaction after EIP 2028 (part in Istanbul)
-	TxTokenPerNonZeroByte     uint64 = 4     // Token cost per non-zero byte as specified by EIP-7623.
-	TxCostFloorPerToken       uint64 = 10    // Cost floor per byte of data as specified by EIP-7623.
+	TxTokenPerNonZeroByte     uint64 = {{ schedule.calldata.TOKEN_PER_NON_ZERO_BYTE }}     // Token cost per non-zero byte as specified by EIP-7623.
+	TxCostFloorPerToken       uint64 = {{ schedule.calldata.COST_FLOOR_PER_TOKEN }}    // Cost floor per byte of data as specified by EIP-7623.
 	TxAccessListAddressGas    uint64 = {{ schedule.transaction.ACCESS_LIST_ADDRESS }}  // Per address specified in EIP 2930 access list
 	TxAccessListStorageKeyGas uint64 = {{ schedule.transaction.ACCESS_LIST_STORAGE_KEY }}  // Per storage key specified in EIP 2930 access list
-	TxAuthTupleGas            uint64 = 12500 // Per auth tuple code specified in EIP-7702
+	TxAuthTupleGas            uint64 = {{ schedule.transaction.AUTH_TUPLE }} // Per auth tuple code specified in EIP-7702
 
 	// These have been changed during the course of the chain
 	CallGasFrontier              uint64 = {{ fork('frontier').opcodes.CALL }}  // Once per CALL operation & message call transaction.
@@ -159,14 +159,14 @@ const (
 	Bn256PairingPerPointGasByzantium uint64 = {{ fork('byzantium').precompiles.ECPAIRING.PAIR }}  // Byzantium per-point price for an elliptic curve pairing check
 	Bn256PairingPerPointGasIstanbul  uint64 = {{ fork('istanbul').precompiles.ECPAIRING.PAIR }}  // Per-point price for an elliptic curve pairing check
 
-	Bls12381G1AddGas          uint64 = 375   // Price for BLS12-381 elliptic curve G1 point addition
-	Bls12381G1MulGas          uint64 = 12000 // Price for BLS12-381 elliptic curve G1 point scalar multiplication
-	Bls12381G2AddGas          uint64 = 600   // Price for BLS12-381 elliptic curve G2 point addition
-	Bls12381G2MulGas          uint64 = 22500 // Price for BLS12-381 elliptic curve G2 point scalar multiplication
-	Bls12381PairingBaseGas    uint64 = 37700 // Base gas price for BLS12-381 elliptic curve pairing check
-	Bls12381PairingPerPairGas uint64 = 32600 // Per-point pair gas price for BLS12-381 elliptic curve pairing check
-	Bls12381MapG1Gas          uint64 = 5500  // Gas price for BLS12-381 mapping field element to G1 operation
-	Bls12381MapG2Gas          uint64 = 23800 // Gas price for BLS12-381 mapping field element to G2 operation
+	Bls12381G1AddGas          uint64 = {{ schedule.precompiles.BLS12_G1ADD.BASE }}   // Price for BLS12-381 elliptic curve G1 point addition
+	Bls12381G1MulGas          uint64 = {{ schedule.precompiles.BLS12_G1MUL.BASE }} // Price for BLS12-381 elliptic curve G1 point scalar multiplication
+	Bls12381G2AddGas          uint64 = {{ schedule.precompiles.BLS12_G2ADD.BASE }}   // Price for BLS12-381 elliptic curve G2 point addition
+	Bls12381G2MulGas          uint64 = {{ schedule.precompiles.BLS12_G2MUL.BASE }} // Price for BLS12-381 elliptic curve G2 point scalar multiplication
+	Bls12381PairingBaseGas    uint64 = {{ schedule.precompiles.BLS12_PAIRING.BASE }} // Base gas price for BLS12-381 elliptic curve pairing check
+	Bls12381PairingPerPairGas uint64 = {{ schedule.precompiles.BLS12_PAIRING.PAIR }} // Per-point pair gas price for BLS12-381 elliptic curve pairing check
+	Bls12381MapG1Gas          uint64 = {{ schedule.precompiles.BLS12_MAP_G1.BASE }}  // Gas price for BLS12-381 mapping field element to G1 operation
+	Bls12381MapG2Gas          uint64 = {{ schedule.precompiles.BLS12_MAP_G2.BASE }} // Gas price for BLS12-381 mapping field element to G2 operation
 
 	P256VerifyGas uint64 = 6900 // secp256r1 elliptic curve signature verifier gas price
 
@@ -179,7 +179,7 @@ const (
 	BlobTxFieldElementsPerBlob         = 4096    // Number of field elements stored in a single data blob
 	BlobTxBlobGasPerBlob               = 1 << 17 // Gas consumption of a single data blob (== blob byte size)
 	BlobTxMinBlobGasprice              = 1       // Minimum gas price for data blobs
-	BlobTxPointEvaluationPrecompileGas = 50000   // Gas price for the point evaluation precompile.
+	BlobTxPointEvaluationPrecompileGas = {{ schedule.precompiles.POINT_EVALUATION.BASE }}   // Gas price for the point evaluation precompile.
 	BlobTxMaxBlobs                     = 6
 	BlobBaseCost                       = 1 << 13 // Base execution gas cost for a blob.
 

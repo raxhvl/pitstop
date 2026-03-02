@@ -1,0 +1,5 @@
+name: "EIP-7702 Set EOA account code"
+
+gas_costs:
+  transaction:
+    AUTH_TUPLE: 12500

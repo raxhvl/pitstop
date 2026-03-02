@@ -25,3 +25,9 @@ forks:
   shanghai:
     extends: london
     eips: ["3860"]
+  cancun:
+    extends: shanghai
+    eips: ["1153", "4844"]
+  prague:
+    extends: cancun
+    eips: ["2537", "7623", "7702"]

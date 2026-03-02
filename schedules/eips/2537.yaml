@@ -1,0 +1,19 @@
+name: "EIP-2537 BLS12-381 curve operations"
+
+gas_costs:
+  precompiles:
+    BLS12_G1ADD:
+      BASE: 375
+    BLS12_G1MUL:
+      BASE: 12000
+    BLS12_G2ADD:
+      BASE: 600
+    BLS12_G2MUL:
+      BASE: 22500
+    BLS12_PAIRING:
+      BASE: 37700
+      PAIR: 32600
+    BLS12_MAP_G1:
+      BASE: 5500
+    BLS12_MAP_G2:
+      BASE: 23800

@@ -1,0 +1,6 @@
+name: "EIP-4844 Shard blob transactions"
+
+gas_costs:
+  precompiles:
+    POINT_EVALUATION:
+      BASE: 50000

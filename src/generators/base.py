@@ -3,7 +3,7 @@
 from abc import ABC, abstractmethod
 from pathlib import Path
 
-from jinja2 import Environment, PackageLoader
+from jinja2 import ChainableUndefined, Environment, PackageLoader
 
 from core.config import PITSTOP_HEADER
 from core.resolver import resolve_fork
@@ -23,6 +23,7 @@ class BaseGenerator(ABC):
         self.env = Environment(
             loader=PackageLoader("templates", client_name),
             keep_trailing_newline=True,
+            undefined=ChainableUndefined,
         )
 
     @property

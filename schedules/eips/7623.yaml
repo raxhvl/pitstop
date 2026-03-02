@@ -1,0 +1,6 @@
+name: "EIP-7623 Increase calldata cost"
+
+gas_costs:
+  calldata:
+    TOKEN_PER_NON_ZERO_BYTE: 4
+    COST_FLOOR_PER_TOKEN: 10

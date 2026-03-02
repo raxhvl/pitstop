@@ -1,0 +1,6 @@
+name: "EIP-1153 Transient storage opcodes"
+
+gas_costs:
+  opcodes:
+    TLOAD: 100
+    TSTORE: 100
