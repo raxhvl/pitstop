@@ -16,3 +16,6 @@ forks:
   istanbul:
     extends: constantinople
     eips: ["1108", "1344", "1884", "2028", "2200"]
+  berlin:
+    extends: istanbul
+    eips: ["2565", "2929", "2930"]

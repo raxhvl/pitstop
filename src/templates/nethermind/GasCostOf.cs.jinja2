@@ -57,14 +57,14 @@ namespace Nethermind.Evm
         public const long SelfBalance = {{ schedule.opcodes.SELFBALANCE }};
         public const long InitCodeWord = 2; //eip-3860 gas per word cost for init code size
 
-        public const long ColdSLoad = 2100; // eip-2929
+        public const long ColdSLoad = {{ schedule.storage.COLD_SLOAD }}; // eip-2929
 
-        public const long ColdAccountAccess = 2600; // eip-2929
-        public const long WarmStateRead = 100; // eip-2929
-        public const long CallPrecompileEip2929 = 100; // eip-2929
+        public const long ColdAccountAccess = {{ schedule.storage.COLD_ACCOUNT_ACCESS }}; // eip-2929
+        public const long WarmStateRead = {{ schedule.storage.WARM_ACCESS }}; // eip-2929
+        public const long CallPrecompileEip2929 = {{ schedule.storage.WARM_ACCESS }}; // eip-2929
 
-        public const long AccessAccountListEntry = 2400; // eip-2930
-        public const long AccessStorageListEntry = 1900; // eip-2930
+        public const long AccessAccountListEntry = {{ schedule.transaction.ACCESS_LIST_ADDRESS }}; // eip-2930
+        public const long AccessStorageListEntry = {{ schedule.transaction.ACCESS_LIST_STORAGE_KEY }}; // eip-2930
         public const long TLoad = WarmStateRead; // eip-1153
         public const long TStore = WarmStateRead; // eip-1153
         public const long PerAuthBaseCost = 12500; // eip-7702
@@ -73,7 +73,7 @@ namespace Nethermind.Evm
         public const long TxDataNonZeroMultiplier = TxDataNonZero / TxDataZero;
         public const long TxDataNonZeroMultiplierEip2028 = TxDataNonZeroEip2028 / TxDataZero;
 
-        public const long MinModExpEip2565 = 200; // eip-2565
+        public const long MinModExpEip2565 = {{ fork('berlin').precompiles.MODEXP.MIN_GAS }}; // eip-2565
         public const long MinModExpEip7883 = 500; // eip-7883
 
         // Eof Execution EIP-7692

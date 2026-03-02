@@ -68,9 +68,9 @@ const (
 	SstoreResetGasEIP2200             uint64 = 5000  // Once per SSTORE operation from clean non-zero to something else
 	SstoreClearsScheduleRefundEIP2200 uint64 = 15000 // Once per SSTORE operation for clearing an originally existing storage slot
 
-	ColdAccountAccessCostEIP2929 = uint64(2600) // COLD_ACCOUNT_ACCESS_COST
-	ColdSloadCostEIP2929         = uint64(2100) // COLD_SLOAD_COST
-	WarmStorageReadCostEIP2929   = uint64(100)  // WARM_STORAGE_READ_COST
+	ColdAccountAccessCostEIP2929 = uint64({{ schedule.storage.COLD_ACCOUNT_ACCESS }}) // COLD_ACCOUNT_ACCESS_COST
+	ColdSloadCostEIP2929         = uint64({{ schedule.storage.COLD_SLOAD }}) // COLD_SLOAD_COST
+	WarmStorageReadCostEIP2929   = uint64({{ schedule.storage.WARM_ACCESS }})  // WARM_STORAGE_READ_COST
 
 	// In EIP-2200: SstoreResetGas was 5000.
 	// In EIP-2929: SstoreResetGas was changed to '5000 - COLD_SLOAD_COST'.
@@ -99,8 +99,8 @@ const (
 	TxDataNonZeroGasEIP2028   uint64 = {{ fork('istanbul').calldata.DATA_NON_ZERO }}    // Per byte of non zero data attached to a transaction after EIP 2028 (part in Istanbul)
 	TxTokenPerNonZeroByte     uint64 = 4     // Token cost per non-zero byte as specified by EIP-7623.
 	TxCostFloorPerToken       uint64 = 10    // Cost floor per byte of data as specified by EIP-7623.
-	TxAccessListAddressGas    uint64 = 2400  // Per address specified in EIP 2930 access list
-	TxAccessListStorageKeyGas uint64 = 1900  // Per storage key specified in EIP 2930 access list
+	TxAccessListAddressGas    uint64 = {{ schedule.transaction.ACCESS_LIST_ADDRESS }}  // Per address specified in EIP 2930 access list
+	TxAccessListStorageKeyGas uint64 = {{ schedule.transaction.ACCESS_LIST_STORAGE_KEY }}  // Per storage key specified in EIP 2930 access list
 	TxAuthTupleGas            uint64 = 12500 // Per auth tuple code specified in EIP-7702
 
 	// These have been changed during the course of the chain

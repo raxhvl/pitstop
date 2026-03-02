@@ -1,0 +1,6 @@
+name: "EIP-2930 Optional access lists"
+
+gas_costs:
+  transaction:
+    ACCESS_LIST_ADDRESS: 2400
+    ACCESS_LIST_STORAGE_KEY: 1900

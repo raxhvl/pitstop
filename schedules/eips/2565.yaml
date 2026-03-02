@@ -1,0 +1,6 @@
+name: "EIP-2565 ModExp gas cost reduction"
+
+gas_costs:
+  precompiles:
+    MODEXP:
+      MIN_GAS: 200

@@ -1,0 +1,7 @@
+name: "EIP-2929 Gas cost increases for state access opcodes"
+
+gas_costs:
+  storage:
+    COLD_ACCOUNT_ACCESS: 2600
+    COLD_SLOAD: 2100
+    WARM_ACCESS: 100
