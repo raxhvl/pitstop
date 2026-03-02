@@ -13,3 +13,6 @@ forks:
   constantinople:
     extends: byzantium
     eips: ["145", "1014", "1052"]
+  istanbul:
+    extends: constantinople
+    eips: ["1108", "1344", "1884", "2028", "2200"]

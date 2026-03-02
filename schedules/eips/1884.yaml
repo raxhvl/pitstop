@@ -1,0 +1,8 @@
+name: "EIP-1884 Repricing for trie-size-dependent opcodes"
+
+gas_costs:
+  opcodes:
+    BALANCE: 700
+    SLOAD: 800
+    EXTCODEHASH: 700
+    SELFBALANCE: 5

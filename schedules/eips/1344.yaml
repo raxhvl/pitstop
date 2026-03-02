@@ -1,0 +1,5 @@
+name: "EIP-1344 ChainID opcode"
+
+gas_costs:
+  opcodes:
+    CHAINID: $GAS_BASE

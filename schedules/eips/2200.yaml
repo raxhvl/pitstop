@@ -1,0 +1,5 @@
+name: "EIP-2200 Rebalance net-metered SSTORE gas cost"
+
+gas_costs:
+  storage:
+    SSTORE_NOOP: 800

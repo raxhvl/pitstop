@@ -1,0 +1,5 @@
+name: "EIP-2028 Calldata gas cost reduction"
+
+gas_costs:
+  calldata:
+    DATA_NON_ZERO: 16

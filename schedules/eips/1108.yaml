@@ -1,0 +1,11 @@
+name: "EIP-1108 Reduce alt_bn128 precompile gas costs"
+
+gas_costs:
+  precompiles:
+    ECADD:
+      BASE: 150
+    ECMUL:
+      BASE: 6000
+    ECPAIRING:
+      BASE: 45000
+      PAIR: 34000
