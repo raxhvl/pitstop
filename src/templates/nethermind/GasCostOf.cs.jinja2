@@ -15,12 +15,12 @@ namespace Nethermind.Evm
         public const long Jump = Mid;
         public const long JumpI = High;
         public const long ExtCode = {{ schedule.opcodes.EXTCODESIZE }};
-        public const long ExtCodeEip150 = 700;
+        public const long ExtCodeEip150 = {{ schedule.opcodes.EXTCODESIZE }};
         public const long Balance = {{ schedule.opcodes.BALANCE }};
-        public const long BalanceEip150 = 400;
+        public const long BalanceEip150 = {{ schedule.opcodes.BALANCE }};
         public const long BalanceEip1884 = 700;
         public const long SLoad = {{ schedule.opcodes.SLOAD }};
-        public const long SLoadEip150 = 200;
+        public const long SLoadEip150 = {{ schedule.opcodes.SLOAD }};
         public const long SLoadEip1884 = 800;
         public const long JumpDest = {{ schedule.opcodes.JUMPDEST }};
         public const long SStoreNetMeteredEip1283 = 200;
@@ -30,7 +30,7 @@ namespace Nethermind.Evm
         public const long Create = {{ schedule.opcodes.CREATE }};
         public const long CodeDeposit = 200;
         public const long Call = {{ schedule.opcodes.CALL }};
-        public const long CallEip150 = 700;
+        public const long CallEip150 = {{ schedule.opcodes.CALL }};
         public const long CallValue = 9000;
         public const long CallStipend = 2300;
         public const long NewAccount = 25000;
@@ -51,7 +51,7 @@ namespace Nethermind.Evm
         public const long Sha3Word = {{ schedule.memory.SHA3_WORD }};
         public const long BlockHash = {{ schedule.opcodes.BLOCKHASH }};
         public const long SelfDestruct = {{ schedule.opcodes.SELFDESTRUCT }};
-        public const long SelfDestructEip150 = 5000;
+        public const long SelfDestructEip150 = {{ schedule.opcodes.SELFDESTRUCT }};
         public const long ExtCodeHash = 400;
         public const long ExtCodeHashEip1884 = 700;
         public const long SelfBalance = 5;

@@ -1,3 +1,6 @@
 forks:
   frontier:
     eips: ["frontier"]
+  tangerine-whistle:
+    extends: frontier
+    eips: ["150"]

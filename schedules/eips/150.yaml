@@ -1,0 +1,12 @@
+name: "EIP-150 Tangerine Whistle"
+
+gas_costs:
+  opcodes:
+    CALL: 700
+    CALLCODE: 700
+    DELEGATECALL: 700
+    BALANCE: 400
+    EXTCODESIZE: 700
+    SLOAD: 200
+    EXTCODECOPY: 700
+    SELFDESTRUCT: 5000
