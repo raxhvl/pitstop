@@ -222,4 +222,10 @@ The `fork()` function resolves any fork on demand (cached via `lru_cache`). This
 - `pitstop swap geth amsterdam` shows only the repricing changes introduced by Amsterdam EIPs
 - Lines without fork suffixes use `schedule.*` which tracks the target fork, so repricing experiments affect the right constants
 
+**When to pin with `fork()`:**
+- **Multiple variants of the same constant** — e.g., `CallGasFrontier` and `CallGasEIP150` both represent the CALL cost at different eras. Pin each to its fork.
+
+**When to use `schedule.*`:**
+- The constant has no fork variants. These track the target fork and are candidates for repricing. If the constant was introduced in a later fork (e.g., `SelfBalance` from Istanbul), it will be empty for earlier forks — that's expected since the opcode didn't exist then.
+
 For detailed technical design and adding new schedules, see [docs/design.md](docs/design.md).
