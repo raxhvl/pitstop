@@ -47,7 +47,7 @@ const (
 
 	Keccak256Gas     uint64 = {{ schedule.opcodes.SHA3 }} // Once per KECCAK256 operation.
 	Keccak256WordGas uint64 = {{ schedule.memory.SHA3_WORD }}  // Once per word of the KECCAK256 operation's data.
-	InitCodeWordGas  uint64 = 2  // Once per word of the init code when creating a contract.
+	InitCodeWordGas  uint64 = {{ schedule.memory.INITCODE_WORD }}  // Once per word of the init code when creating a contract.
 
 	SstoreSetGas    uint64 = {{ schedule.storage.SSTORE_SET_COST }} // Once per SSTORE operation.
 	SstoreResetGas  uint64 = {{ schedule.storage.SSTORE_RESET_COST }}  // Once per SSTORE operation if the zeroness changes from zero.

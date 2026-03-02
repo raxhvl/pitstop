@@ -1,0 +1,5 @@
+name: "EIP-3860 Limit and meter initcode"
+
+gas_costs:
+  memory:
+    INITCODE_WORD: 2

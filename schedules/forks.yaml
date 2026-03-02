@@ -22,3 +22,6 @@ forks:
   london:
     extends: berlin
     eips: ["3198", "3529"]
+  shanghai:
+    extends: london
+    eips: ["3860"]
