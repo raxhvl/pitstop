@@ -1,0 +1,5 @@
+name: "EIP-3529 Reduction in refunds"
+
+gas_costs:
+  storage:
+    REFUND_QUOTIENT: 5

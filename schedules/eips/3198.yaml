@@ -1,0 +1,5 @@
+name: "EIP-3198 BASEFEE opcode"
+
+gas_costs:
+  opcodes:
+    BASEFEE: $GAS_BASE

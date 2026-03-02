@@ -19,3 +19,6 @@ forks:
   berlin:
     extends: istanbul
     eips: ["2565", "2929", "2930"]
+  london:
+    extends: berlin
+    eips: ["3198", "3529"]
