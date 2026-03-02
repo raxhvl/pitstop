@@ -121,7 +121,7 @@ const (
 
 	// EXP has a dynamic portion depending on the size of the exponent
 	ExpByteFrontier uint64 = {{ schedule.memory.EXPBYTE }} // was set to 10 in Frontier
-	ExpByteEIP158   uint64 = 50 // was raised to 50 during Eip158 (Spurious Dragon)
+	ExpByteEIP158   uint64 = {{ schedule.memory.EXPBYTE }} // was raised to 50 during Eip158 (Spurious Dragon)
 
 	// Extcodecopy has a dynamic AND a static cost. This represents only the
 	// static portion of the gas. It was changed during EIP 150 (Tangerine)

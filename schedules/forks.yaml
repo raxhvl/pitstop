@@ -4,3 +4,6 @@ forks:
   tangerine-whistle:
     extends: frontier
     eips: ["150"]
+  spurious-dragon:
+    extends: tangerine-whistle
+    eips: ["160"]

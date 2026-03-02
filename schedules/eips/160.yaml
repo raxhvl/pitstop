@@ -1,0 +1,5 @@
+name: "EIP-160 Spurious Dragon"
+
+gas_costs:
+  memory:
+    EXPBYTE: 50

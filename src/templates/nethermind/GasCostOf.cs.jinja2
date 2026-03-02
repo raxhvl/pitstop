@@ -36,7 +36,7 @@ namespace Nethermind.Evm
         public const long NewAccount = 25000;
         public const long Exp = {{ schedule.opcodes.EXP }};
         public const long ExpByte = {{ schedule.memory.EXPBYTE }};
-        public const long ExpByteEip160 = 50;
+        public const long ExpByteEip160 = {{ schedule.memory.EXPBYTE }};
         public const long Memory = {{ schedule.memory.MEMORY_WORD }};
         public const long TxCreate = {{ schedule.opcodes.CREATE }};
         public const long TxDataZero = {{ schedule.calldata.DATA_ZERO }};
