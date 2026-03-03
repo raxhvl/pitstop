@@ -1,0 +1,24 @@
+name: "EIP-7904 Opcode and precompile repricing"
+
+gas_costs:
+  opcodes:
+    DIV: 15
+    SDIV: 20
+    MOD: 12
+    MULMOD: 11
+    SHA3: 45
+
+  precompiles:
+    ECADD:
+      BASE: 314
+    BLAKE2F:
+      BASE: 170
+      ROUND: 2
+    BLS12_G1ADD:
+      BASE: 643
+    BLS12_G2ADD:
+      BASE: 765
+    ECPAIRING:
+      PAIR: 34103
+    POINT_EVALUATION:
+      BASE: 89363
