@@ -1,0 +1,5 @@
+name: "EIP-7981 Access list floor pricing"
+
+# No new gas constants — reuses TOTAL_COST_FLOOR_PER_TOKEN from EIP-7623/7976.
+# Formula change only: includes access list bytes in floor token count.
+gas_costs: {}

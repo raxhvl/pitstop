@@ -1,0 +1,5 @@
+name: "EIP-7976 Calldata floor cost increase"
+
+gas_costs:
+  calldata:
+    COST_FLOOR_PER_TOKEN: 16
