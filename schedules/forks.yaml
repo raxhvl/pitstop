@@ -36,4 +36,4 @@ forks:
     eips: ["7883", "7939", "7951"]
   amsterdam:
     extends: osaka
-    eips: ["7904"]
+    eips: ["7904", "8038"]

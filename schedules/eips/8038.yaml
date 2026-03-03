@@ -1,0 +1,12 @@
+name: "EIP-8038 State-access repricing"
+
+# Values TBD — using 9000 placeholders until spec is finalized
+gas_costs:
+  storage:
+    COLD_ACCOUNT_ACCESS: 9000
+    COLD_SLOAD: 9000
+    WARM_ACCESS: 9000
+
+  transaction:
+    ACCESS_LIST_ADDRESS: 9000
+    ACCESS_LIST_STORAGE_KEY: 9000
