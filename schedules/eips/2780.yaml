@@ -1,0 +1,14 @@
+name: "EIP-2780 Reduce transaction costs"
+
+# Decomposes monolithic TX_BASE_COST into explicit primitives:
+# signature recovery (3000) + account-leaf update (1000) + sender cold touch (500)
+gas_costs:
+  transaction:
+    BASE: 4500
+    CALL_VALUE: 2000
+    NEW_ACCOUNT: 25000
+    STATE_UPDATE: 1000
+
+  storage:
+    COLD_ACCOUNT_ACCESS_CODE: 2600
+    COLD_ACCOUNT_ACCESS_NOCODE: 500
